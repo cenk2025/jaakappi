@@ -1,0 +1,186 @@
+.sidebar {
+    width: 280px;
+    background: var(--card-bg);
+    border-right: 1px solid var(--card-border);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+}
+
+.logoIcon {
+    background: var(--primary);
+    color: #000;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+
+.logo h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.logo h1 span {
+    color: var(--primary);
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
+}
+
+.navItem:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--foreground);
+}
+
+.navItem.active {
+    background: rgba(0, 255, 133, 0.1);
+    color: var(--primary);
+}
+
+.filters {
+    margin-top: 3rem;
+    flex: 1;
+}
+
+.filterHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+}
+
+.dietList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.dietItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    width: fit-content;
+}
+
+.dietItem:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.dietItem.selected {
+    background: var(--primary);
+    color: #000;
+}
+
+.userProfile {
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.profileMain {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.userProfile img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+}
+
+.userInfo .userName {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.userInfo .userStatus {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.logoutBtn {
+    color: var(--text-secondary);
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.logoutBtn:hover {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+}
+
+.loginBtn {
+    color: var(--primary);
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+    background: rgba(0, 255, 133, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginBtn:hover {
+    background: rgba(0, 255, 133, 0.15);
+    transform: scale(1.05);
+}
+
+a.profileMain {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+a.profileMain:hover {
+    opacity: 0.8;
+}
