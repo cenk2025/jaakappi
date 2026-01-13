@@ -88,3 +88,9 @@ button {
 html {
   scroll-behavior: smooth;
 }
+
+@media (max-width: 768px) {
+  main {
+    padding: 4rem 1rem 2rem 1rem !important;
+  }
+}

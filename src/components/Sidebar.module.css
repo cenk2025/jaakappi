@@ -8,13 +8,82 @@
     height: 100vh;
     position: sticky;
     top: 0;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3rem;
 }
 
 .logo {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 3rem;
+}
+
+.closeBtn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.mobileMenuBtn {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 900;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--primary);
+    padding: 0.75rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 950;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: 0;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .mobileMenuBtn {
+        display: flex;
+    }
+
+    .closeBtn {
+        display: block;
+    }
+
+    .overlay {
+        display: block;
+    }
 }
 
 .logoIcon {
