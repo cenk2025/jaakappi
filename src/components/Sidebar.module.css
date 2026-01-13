@@ -6,11 +6,14 @@
     flex-direction: column;
     padding: 2rem 1.5rem;
     height: 100vh;
+    height: 100dvh;
+    min-height: -webkit-fill-available;
     position: sticky;
     top: 0;
     transition: transform 0.3s ease;
     z-index: 1000;
     overflow-y: auto;
+    padding-bottom: 5rem;
 }
 
 .sidebarHeader {
@@ -67,6 +70,8 @@
         position: fixed;
         left: 0;
         transform: translateX(-100%);
+        padding-bottom: 8rem;
+        /* Even more space for mobile browser bars */
     }
 
     .sidebar.open {
