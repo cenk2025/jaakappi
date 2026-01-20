@@ -13,7 +13,7 @@ export async function POST(req: Request) {
         const { ingredients, diets } = await req.json();
 
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash-002",
+            model: "gemini-1.5-pro",
             generationConfig: { responseMimeType: "application/json" }
         });
 
