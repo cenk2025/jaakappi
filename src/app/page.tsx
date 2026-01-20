@@ -101,7 +101,7 @@ export default function Home() {
       <header className={styles.header}>
         <div>
           <h1>Tervetuloa takaisin, <span className={styles.username}>{userName}</span></h1>
-          <p className={styles.subtitle}>Mitä kokkaamme tänään?</p>
+          <p className={styles.subtitle}>Jaakappi AI v2.0 - Mitä kokkaamme tänään?</p>
         </div>
         <div className={styles.searchBar}>
           <Search size={20} />

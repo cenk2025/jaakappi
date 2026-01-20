@@ -30,6 +30,7 @@ export default function RecipeDetailPage() {
     const [shoppingList, setShoppingList] = useState<string[]>([]);
 
     useEffect(() => {
+        console.log("APP VERSION 2.0 LOADED"); // DEBUG MARKER
         if (typeof window !== 'undefined' && params?.id) {
             const storedRecipes = localStorage.getItem('generatedRecipes');
             // Decode URL parameter to handle any encoded characters correctly
