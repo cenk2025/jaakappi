@@ -26,6 +26,9 @@ export default function Home() {
   const [missingIngredients, setMissingIngredients] = useState<string[]>([]);
 
   useEffect(() => {
+    // Clear old data on fresh load to prevent conflicts
+    localStorage.removeItem('generatedRecipes');
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setUserName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || "Chef");
@@ -69,7 +72,7 @@ export default function Home() {
         const mappedRecipes = data.recipes.map((r: any, index: number) => ({
           ...r,
           // FORCE the ID to be strictly generated to avoid encoding issues with Finnish characters in URL
-          id: `gen-${index}`,
+          id: `recipe-${index}`,
           time: r.prepTime || '30 min', // Map prepTime to time
           image: PLACEHOLDER_IMAGES[index % PLACEHOLDER_IMAGES.length], // Assign placeholder
           missingIngredients: r.ingredients?.filter((i: any) => i.status === 'missing').map((i: any) => i.name) || []
