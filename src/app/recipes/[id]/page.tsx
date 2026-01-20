@@ -115,7 +115,7 @@ export default function RecipeDetailPage() {
                             <div className={styles.stepIngredients}>
                                 <p className={styles.stepIngTitle}>Tässä vaiheessa tarvitset:</p>
                                 <div className={styles.ingList}>
-                                    {step.ingredients.map(ing => (
+                                    {step.ingredients.map((ing: string) => (
                                         <span key={ing} className={styles.ingBadge}>{ing}</span>
                                     ))}
                                 </div>
@@ -191,7 +191,7 @@ export default function RecipeDetailPage() {
                 <section className={styles.ingredientsList}>
                     <h2>Ainekset</h2>
                     <div className={styles.ingredientsGrid}>
-                        {recipe.ingredients.map((ing, index) => (
+                        {recipe.ingredients.map((ing: any, index: number) => (
                             <div key={index} className={`${styles.ingredientItem} ${ing.status === 'missing' ? styles.missing : ''}`}>
                                 <div className={styles.ingInfo}>
                                     <p className={styles.ingName}>{ing.name}</p>
@@ -217,7 +217,7 @@ export default function RecipeDetailPage() {
                 <section className={styles.instructionsPreview}>
                     <h2>Ohjeet yhdellä silmäyksellä</h2>
                     <div className={styles.stepsPreview}>
-                        {recipe.steps.map((step, index) => (
+                        {recipe.steps.map((step: any, index: number) => (
                             <div key={index} className={styles.stepPreviewItem}>
                                 <span className={styles.stepNum}>{index + 1}</span>
                                 <p>{step.instruction}</p>
