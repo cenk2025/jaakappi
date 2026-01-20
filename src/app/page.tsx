@@ -75,6 +75,7 @@ export default function Home() {
         }));
 
         setRecipes(mappedRecipes);
+        localStorage.setItem('generatedRecipes', JSON.stringify(mappedRecipes));
 
         // Aggregate all unique missing ingredients for the shopping list
         const allMissing = new Set<string>();

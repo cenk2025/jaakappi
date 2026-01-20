@@ -12,7 +12,7 @@ import {
     Clock,
     Flame
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import styles from './RecipeDetail.module.css';
 
 const mockFullRecipe = {
@@ -55,12 +55,34 @@ const mockFullRecipe = {
 
 export default function RecipeDetailPage() {
     const router = useRouter();
+    const params = useParams();
+    const [recipe, setRecipe] = useState<any>(mockFullRecipe);
+    const [loading, setLoading] = useState(true);
+
     const [cookingMode, setCookingMode] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
     const [completedSteps, setCompletedSteps] = useState<number[]>([]);
     const [shoppingList, setShoppingList] = useState<string[]>([]);
 
-    const recipe = mockFullRecipe; // In real app, fetch by id
+    useEffect(() => {
+        if (typeof window !== 'undefined' && params?.id) {
+            const storedRecipes = localStorage.getItem('generatedRecipes');
+            if (storedRecipes) {
+                try {
+                    const parsed = JSON.parse(storedRecipes);
+                    const found = parsed.find((r: any) => r.id === params.id);
+                    if (found) {
+                        setRecipe(found);
+                    }
+                } catch (e) {
+                    console.error("Failed to parse recipes", e);
+                }
+            }
+        }
+        setLoading(false);
+    }, [params]);
+
+    if (loading) return <div className="p-8 text-center text-white">Ladataan reseptiä...</div>;
 
     const speak = (text: string) => {
         if ('speechSynthesis' in window) {
