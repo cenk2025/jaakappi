@@ -1,9 +1,14 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const apiKey = process.env.GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey || "");
 
 export async function POST(req: Request) {
+    if (!apiKey) {
+        console.error("GEMINI_API_KEY puuttuu ympäristömuuttujista.");
+        return NextResponse.json({ error: "Palvelimen konfiguraatiovirhe: API-avain puuttuu." }, { status: 500 });
+    }
     try {
         const { image } = await req.json();
 
@@ -26,7 +31,7 @@ export async function POST(req: Request) {
             base64Data = image.includes(",") ? image.split(",")[1] : image;
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-002" });
 
         const prompt = "Analysoi tämä kuva jääkaapista ja luettele kaikki näkyvät ainekset. Palauta vain pilkulla erotettu luettelo aineksista suomeksi. Älä kirjoita mitään muuta.";
 

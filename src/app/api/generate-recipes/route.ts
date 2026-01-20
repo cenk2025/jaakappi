@@ -1,14 +1,19 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const apiKey = process.env.GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey || "");
 
 export async function POST(req: Request) {
+    if (!apiKey) {
+        console.error("GEMINI_API_KEY puuttuu ympäristömuuttujista.");
+        return NextResponse.json({ error: "Palvelimen konfiguraatiovirhe: API-avain puuttuu." }, { status: 500 });
+    }
     try {
         const { ingredients, diets } = await req.json();
 
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
+            model: "gemini-1.5-flash-002",
             generationConfig: { responseMimeType: "application/json" }
         });
 
