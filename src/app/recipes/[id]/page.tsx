@@ -67,17 +67,23 @@ export default function RecipeDetailPage() {
     useEffect(() => {
         if (typeof window !== 'undefined' && params?.id) {
             const storedRecipes = localStorage.getItem('generatedRecipes');
+            // Decode URL parameter to handle any encoded characters correctly
+            const urlId = decodeURIComponent(String(params.id));
+
+            console.log("Looking for recipe ID:", urlId);
+
             if (storedRecipes) {
                 try {
                     const parsed = JSON.parse(storedRecipes);
-                    // Loose query to handle number vs string ID mismatch
-                    const found = parsed.find((r: any) => String(r.id) === String(params.id));
+                    console.log("Stored recipes IDs:", parsed.map((r: any) => r.id));
+
+                    const found = parsed.find((r: any) => String(r.id) === urlId);
 
                     if (found) {
                         console.log("Found recipe in local storage:", found);
                         setRecipe(found);
                     } else {
-                        console.warn("Recipe not found in local storage for ID:", params.id);
+                        console.warn("Recipe not found in local storage for ID:", urlId);
                     }
                 } catch (e) {
                     console.error("Failed to parse recipes", e);

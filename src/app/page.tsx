@@ -68,7 +68,8 @@ export default function Home() {
         // Map API response to UI Component props
         const mappedRecipes = data.recipes.map((r: any, index: number) => ({
           ...r,
-          id: r.id || `gen-${index}`,
+          // FORCE the ID to be strictly generated to avoid encoding issues with Finnish characters in URL
+          id: `gen-${index}`,
           time: r.prepTime || '30 min', // Map prepTime to time
           image: PLACEHOLDER_IMAGES[index % PLACEHOLDER_IMAGES.length], // Assign placeholder
           missingIngredients: r.ingredients?.filter((i: any) => i.status === 'missing').map((i: any) => i.name) || []
