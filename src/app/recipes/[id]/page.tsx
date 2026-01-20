@@ -70,13 +70,20 @@ export default function RecipeDetailPage() {
             if (storedRecipes) {
                 try {
                     const parsed = JSON.parse(storedRecipes);
-                    const found = parsed.find((r: any) => r.id === params.id);
+                    // Loose query to handle number vs string ID mismatch
+                    const found = parsed.find((r: any) => String(r.id) === String(params.id));
+
                     if (found) {
+                        console.log("Found recipe in local storage:", found);
                         setRecipe(found);
+                    } else {
+                        console.warn("Recipe not found in local storage for ID:", params.id);
                     }
                 } catch (e) {
                     console.error("Failed to parse recipes", e);
                 }
+            } else {
+                console.warn("No generatedRecipes found in localStorage");
             }
         }
         setLoading(false);
