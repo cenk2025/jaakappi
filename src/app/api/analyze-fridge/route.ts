@@ -31,7 +31,7 @@ export async function POST(req: Request) {
             base64Data = image.includes(",") ? image.split(",")[1] : image;
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const prompt = "Analysoi tämä kuva jääkaapista ja luettele kaikki näkyvät ainekset. Palauta vain pilkulla erotettu luettelo aineksista suomeksi. Älä kirjoita mitään muuta.";
 
