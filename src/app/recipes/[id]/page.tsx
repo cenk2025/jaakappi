@@ -15,49 +15,14 @@ import {
 import { useRouter, useParams } from 'next/navigation';
 import styles from './RecipeDetail.module.css';
 
-const mockFullRecipe = {
-    id: '1',
-    title: 'Pinaatti-Feta Munakas',
-    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=1000&auto=format&fit=crop',
-    prepTime: '5 min',
-    cookTime: '10 min',
-    calories: 320,
-    ingredients: [
-        { name: 'Kananmunat', amount: '3 kpl', status: 'instock' },
-        { name: 'Tuore pinaatti', amount: '2 kourallista', status: 'instock' },
-        { name: 'Feta-juusto', amount: '50g', status: 'missing' },
-        { name: 'Maito', amount: '0.5 dl', status: 'instock' },
-        { name: 'Suola ja pippuri', amount: 'maun mukaan', status: 'instock' }
-    ],
-    steps: [
-        {
-            title: 'Valmistele ainekset',
-            instruction: 'Riko kananmunat kulhoon. Lisää maito, suola ja pippuri. Vatkaa kevyesti haarukalla.',
-            ingredients: ['Kananmunat', 'Maito', 'Suola ja pippuri']
-        },
-        {
-            title: 'Kuullota pinaatti',
-            instruction: 'Lämmitä pannu keskilämmöllä. Lisää tilkka öljyä ja paista pinaattia, kunnes se menee kasaan.',
-            ingredients: ['Tuore pinaatti']
-        },
-        {
-            title: 'Paista munakas',
-            instruction: 'Kaada munaseos pannulle pinaatin päälle. Murenna feta-juusto pinnalle.',
-            ingredients: ['Feta-juusto']
-        },
-        {
-            title: 'Viimeistely',
-            instruction: 'Paista miedolla lämmöllä kannen alla 3-5 minuuttia, kunnes munakas on hyytynyt. Tarjoile heti.',
-            ingredients: []
-        }
-    ]
-};
+
 
 export default function RecipeDetailPage() {
     const router = useRouter();
     const params = useParams();
-    const [recipe, setRecipe] = useState<any>(mockFullRecipe);
+    const [recipe, setRecipe] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [debugInfo, setDebugInfo] = useState<string>("");
 
     const [cookingMode, setCookingMode] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
@@ -70,32 +35,44 @@ export default function RecipeDetailPage() {
             // Decode URL parameter to handle any encoded characters correctly
             const urlId = decodeURIComponent(String(params.id));
 
-            console.log("Looking for recipe ID:", urlId);
-
             if (storedRecipes) {
                 try {
                     const parsed = JSON.parse(storedRecipes);
-                    console.log("Stored recipes IDs:", parsed.map((r: any) => r.id));
 
                     const found = parsed.find((r: any) => String(r.id) === urlId);
 
                     if (found) {
-                        console.log("Found recipe in local storage:", found);
                         setRecipe(found);
                     } else {
-                        console.warn("Recipe not found in local storage for ID:", urlId);
+                        setDebugInfo(`ID mismatch. Params: ${urlId}. Available: ${parsed.map((r: any) => r.id).join(', ')}`);
                     }
                 } catch (e) {
-                    console.error("Failed to parse recipes", e);
+                    setDebugInfo("JSON Parse Error");
                 }
             } else {
-                console.warn("No generatedRecipes found in localStorage");
+                setDebugInfo("No generatedRecipes in localStorage");
             }
         }
         setLoading(false);
     }, [params]);
 
     if (loading) return <div className="p-8 text-center text-white">Ladataan reseptiä...</div>;
+
+    if (!recipe) {
+        return (
+            <div className="p-8 text-center text-white">
+                <h2 className="text-xl mb-4">Reseptiä ei löytynyt :(</h2>
+                <div className="bg-red-900/50 p-4 rounded text-left font-mono text-sm overflow-auto">
+                    <p>Debug Info:</p>
+                    <p>{debugInfo}</p>
+                    <button onClick={() => router.push('/')} className="mt-4 bg-white text-black px-4 py-2 rounded">
+                        Palaa Etusivulle
+                    </button>
+                    <p className="mt-4 text-xs text-gray-400">Vinkki: Palaa etusivulle ja ota uusi kuva.</p>
+                </div>
+            </div>
+        );
+    }
 
     const speak = (text: string) => {
         if ('speechSynthesis' in window) {
