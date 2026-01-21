@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from '@/lib/supabase';
+import { db } from '@/lib/db-actions';
 import Scanner from '@/components/Scanner';
 import RecipeCard from '@/components/RecipeCard';
 import styles from './page.module.css';
@@ -86,7 +87,21 @@ export default function Home() {
         mappedRecipes.forEach((r: any) => {
           r.missingIngredients?.forEach((ing: string) => allMissing.add(ing));
         });
-        setMissingIngredients(Array.from(allMissing));
+        const missingArray = Array.from(allMissing);
+        setMissingIngredients(missingArray);
+
+        // PERSIST TO DB IF USER IS LOGGED IN
+        // Fire and forget - don't block UI
+        if (missingArray.length > 0) {
+          db.addToShoppingList(missingArray).then((success: boolean) => {
+            if (success) console.log("Saved missing ingredients to DB");
+          });
+        }
+
+        db.saveRecipes(mappedRecipes).then((success: boolean) => {
+          if (success) console.log("Saved recipes to archive");
+        });
+
       }
     } catch (err: any) {
       console.error("Failed to generate recipes", err);

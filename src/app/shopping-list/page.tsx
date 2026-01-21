@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Plus,
     Trash2,
@@ -11,46 +11,64 @@ import {
 } from 'lucide-react';
 import styles from './ShoppingList.module.css';
 
+import { db } from '@/lib/db-actions';
+
 interface ShoppingItem {
     id: string;
     name: string;
     category: string;
     checked: boolean;
 }
+// Remove ShoppingListItem import to avoid confusion
+// import { ShoppingListItem } from '@/lib/db-actions';
 
-const initialItems: ShoppingItem[] = [
-    { id: '1', name: 'Feta-juusto', category: 'Maitotuotteet', checked: false },
-    { id: '2', name: 'Kirsikkatomaatit', category: 'Vihannekset', checked: false },
-    { id: '3', name: 'Oliiviöljy', category: 'Kuivatuotteet', checked: true }
-];
+// ...
 
 export default function ShoppingListPage() {
-    const [items, setItems] = useState<ShoppingItem[]>(initialItems);
+    const [items, setItems] = useState<ShoppingItem[]>([]);
     const [newItem, setNewItem] = useState('');
 
-    const addItem = (e: React.FormEvent) => {
+    useEffect(() => {
+        loadItems();
+    }, []);
+
+    const loadItems = async () => {
+        const data = await db.getShoppingList();
+        const mapped = data.map((item: any) => ({
+            id: item.id,
+            name: item.item_name,
+            category: item.category || 'Muu',
+            checked: item.is_checked
+        }));
+        setItems(mapped);
+    };
+
+    const addItem = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!newItem.trim()) return;
 
-        const item: ShoppingItem = {
-            id: Math.random().toString(36).substr(2, 9),
-            name: newItem,
-            category: 'Muu',
-            checked: false
-        };
-
-        setItems([...items, item]);
-        setNewItem('');
+        const success = await db.addToShoppingList([newItem]);
+        if (success) {
+            setNewItem('');
+            loadItems();
+        }
     };
 
-    const toggleItem = (id: string) => {
-        setItems(items.map(item =>
-            item.id === id ? { ...item, checked: !item.checked } : item
-        ));
+    const toggleItem = async (id: string) => {
+        // Optimistic update
+        const item = items.find(i => i.id === id);
+        if (!item) return;
+
+        const newStatus = !item.checked;
+        setItems(items.map(i => i.id === id ? { ...i, checked: newStatus } : i));
+
+        await db.toggleShoppingItem(id, newStatus);
     };
 
-    const deleteItem = (id: string) => {
-        setItems(items.filter(item => item.id !== id));
+    const deleteItem = async (id: string) => {
+        // Optimistic update
+        setItems(items.filter(i => i.id !== id));
+        await db.deleteShoppingItem(id);
     };
 
     const categories = Array.from(new Set(items.map(i => i.category)));

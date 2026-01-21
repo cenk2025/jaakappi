@@ -5,18 +5,30 @@ import RecipeCard from '@/components/RecipeCard';
 import styles from './Recipes.module.css';
 import { Search, SlidersHorizontal } from 'lucide-react';
 
+import { db } from '@/lib/db-actions';
+
 export default function RecipesPage() {
     const [recipes, setRecipes] = useState<any[]>([]);
 
     useEffect(() => {
-        const storedRecipes = localStorage.getItem('generatedRecipes');
-        if (storedRecipes) {
-            try {
-                setRecipes(JSON.parse(storedRecipes));
-            } catch (e) {
-                console.error("Failed to parse recipes", e);
+        const loadRecipes = async () => {
+            // Try DB first (if user is logged in, this returns data)
+            const dbRecipes = await db.getSavedRecipes();
+            if (dbRecipes && dbRecipes.length > 0) {
+                setRecipes(dbRecipes);
+            } else {
+                // Fallback to local storage for guests or empty DB
+                const storedRecipes = localStorage.getItem('generatedRecipes');
+                if (storedRecipes) {
+                    try {
+                        setRecipes(JSON.parse(storedRecipes));
+                    } catch (e) {
+                        console.error("Failed to parse recipes", e);
+                    }
+                }
             }
-        }
+        };
+        loadRecipes();
     }, []);
 
     return (
